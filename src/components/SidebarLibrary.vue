@@ -16,7 +16,7 @@
             </a>
           </li>
           <li>
-            <a href="/catalog">
+            <a href="#/catalog">
               <i class="fas fa-book"></i>
               <span v-if="!collapsed">Каталоги</span>
             </a>

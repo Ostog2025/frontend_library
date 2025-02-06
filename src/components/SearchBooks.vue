@@ -11,7 +11,9 @@
     <div v-if="showResults && books.length" class="search-results">
       <ul>
         <li v-for="book in books" :key="book.bookid">
-          <a :href="`/book/${book.bookid}`">{{ book.title }}</a>
+          <router-link :to="`/book/${book.bookid}`">{{
+            book.title
+          }}</router-link>
         </li>
       </ul>
     </div>
