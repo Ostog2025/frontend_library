@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "@/layouts/MainLayout.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
@@ -20,13 +20,13 @@ const routes = [
         meta: { title: "Home - My Vue App" },
       },
       {
-        path: "/catalog",
+        path: "catalog",
         name: "Catalog",
         component: CatalogPage,
         meta: { title: "Catalog - My Vue App" },
       },
       {
-        path: "/book/:id",
+        path: "book/:id",
         name: "BookDetails",
         component: BookDetails,
         meta: { title: "Book - My Vue App" },
@@ -34,7 +34,7 @@ const routes = [
     ],
   },
   {
-    path: "/auth",
+    path: "auth",
     component: AuthLayout,
     children: [
       {
@@ -59,7 +59,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 
