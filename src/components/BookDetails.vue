@@ -72,16 +72,32 @@ export default {
     };
   },
   async created() {
-    const bookId = this.$route.params.id;
-    try {
-      const response = await api.get(`/books/id/${bookId}`);
-      this.book = response.data;
-    } catch (err) {
-      this.error = "Не вдалося завантажити дані про книгу.";
-      console.error(err);
-    } finally {
-      this.loading = false;
-    }
+    await this.fetchBook();
+  },
+  watch: {
+    "$route.params.id": {
+      immediate: true,
+      handler() {
+        this.fetchBook();
+      },
+    },
+  },
+  methods: {
+    async fetchBook() {
+      this.loading = true;
+      this.error = null;
+      const bookId = this.$route.params.id;
+
+      try {
+        const response = await api.get(`/books/id/${bookId}`);
+        this.book = response.data;
+      } catch (err) {
+        this.error = "Не вдалося завантажити дані про книгу.";
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 };
 </script>
