@@ -20,13 +20,13 @@ const routes = [
         meta: { title: "Home - My Vue App" },
       },
       {
-        path: "catalog",
+        path: "/catalog",
         name: "Catalog",
         component: CatalogPage,
         meta: { title: "Catalog - My Vue App" },
       },
       {
-        path: "book/:id",
+        path: "/book/:id",
         name: "BookDetails",
         component: BookDetails,
         meta: { title: "Book - My Vue App" },
@@ -34,7 +34,7 @@ const routes = [
     ],
   },
   {
-    path: "auth",
+    path: "/auth",
     component: AuthLayout,
     children: [
       {
