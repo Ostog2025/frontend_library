@@ -11,9 +11,9 @@
     <div v-if="showResults && books.length" class="search-results">
       <ul>
         <li v-for="book in books" :key="book.bookid">
-          <router-link :to="`/book/${book.bookid}`">{{
-            book.title
-          }}</router-link>
+          <router-link :to="`/book/${book.bookid}`" @click="closeResults">
+            {{ book.title }}
+          </router-link>
         </li>
       </ul>
     </div>
@@ -72,7 +72,10 @@ export default {
         }
       }, 300);
     },
-
+    closeResults() {
+      this.showResults = false;
+      this.query = "";
+    },
     handleClickOutside(event) {
       const searchHeader = this.$refs.searchHeader;
       if (searchHeader && !searchHeader.contains(event.target)) {

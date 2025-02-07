@@ -9,8 +9,8 @@
       </template>
       <template v-else>
         <div class="auth-links">
-          <a href="/auth/login">Login</a>
-          <a href="/auth/register">Register</a>
+          <a href="#/auth/login">Login</a>
+          <a href="#/auth/register">Register</a>
         </div>
       </template>
     </div>
