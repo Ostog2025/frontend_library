@@ -1,6 +1,5 @@
 <template>
   <div class="books-list">
-    <!-- Фільтри -->
     <transition
       name="fade"
       @before-enter="beforeEnter"
@@ -9,8 +8,8 @@
     >
       <div class="filters">
         <div class="div">
-          <label for="author">Автор:</label>
-          <select v-model="filters.authorid" @change="fetchBooks">
+          <label for="authorid">Автор:</label>
+          <select id="authorid" v-model="filters.authorid" @change="fetchBooks">
             <option value="">Всі</option>
             <option
               v-for="author in authors"
@@ -21,8 +20,8 @@
             </option>
           </select>
 
-          <label for="genre">Жанр:</label>
-          <select v-model="filters.genreid" @change="fetchBooks">
+          <label for="genreid">Жанр:</label>
+          <select id="genreid" v-model="filters.genreid" @change="fetchBooks">
             <option value="">Всі</option>
             <option
               v-for="genre in genres"
@@ -33,8 +32,12 @@
             </option>
           </select>
 
-          <label for="publisher">Видавництво:</label>
-          <select v-model="filters.publisherid" @change="fetchBooks">
+          <label for="publisherid">Видавництво:</label>
+          <select
+            id="publisherid"
+            v-model="filters.publisherid"
+            @change="fetchBooks"
+          >
             <option value="">Всі</option>
             <option
               v-for="publisher in publishers"
@@ -48,13 +51,17 @@
 
         <div class="div">
           <label for="sortBy">Сортувати за:</label>
-          <select v-model="filters.sortBy" @change="fetchBooks">
+          <select id="sortBy" v-model="filters.sortBy" @change="fetchBooks">
             <option value="title">Назвою</option>
             <option value="year">Роком</option>
           </select>
 
           <label for="sortOrder">Порядок:</label>
-          <select v-model="filters.sortOrder" @change="fetchBooks">
+          <select
+            id="sortOrder"
+            v-model="filters.sortOrder"
+            @change="fetchBooks"
+          >
             <option value="asc">За зростанням</option>
             <option value="desc">За спаданням</option>
           </select>
@@ -62,7 +69,6 @@
       </div>
     </transition>
 
-    <!-- Список книг -->
     <transition
       name="fade"
       @before-enter="beforeEnter"
@@ -70,19 +76,25 @@
       @leave="leave"
     >
       <div class="book-grid">
-        <div v-for="book in books" :key="book.bookid" class="book-item">
+        <div
+          v-for="book in books"
+          :key="book.bookid"
+          tabindex="0"
+          class="book-item"
+          @keydown.enter="goToBookDetails(book.bookid)"
+        >
           <router-link :to="`/book/${book.bookid}`" class="book-link">
             <div class="book-card">
               <div class="book-front">
                 <img
-                  :src="`https://backend-library-0o7f.onrender.com/images/book_covers/${book.book_photo}`"
+                  :src="`${book.book_photo}`"
                   alt="Фото книги"
                   v-if="book.book_photo"
                 />
               </div>
               <div class="book-back">
                 <img
-                  :src="`https://backend-library-0o7f.onrender.com/images/book_covers/${book.book_photo}`"
+                  :src="`${book.book_photo}`"
                   alt="Фото книги"
                   v-if="book.book_photo"
                 />
@@ -146,6 +158,9 @@ export default {
       } catch (err) {
         console.error("Помилка при отриманні фільтрів:", err);
       }
+    },
+    goToBookDetails(bookId) {
+      this.$router.push(`/book/${bookId}`);
     },
     beforeEnter(el) {
       el.style.opacity = 0;
@@ -218,12 +233,6 @@ export default {
   border-color: #93c5fd;
 }
 
-.filters select:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-}
-
 .filters .div > * {
   flex: 1;
   min-width: 150px;
@@ -261,6 +270,14 @@ export default {
 .book-item {
   perspective: 1000px;
   margin: 0 auto;
+}
+
+.book-item:focus {
+  outline: none;
+  box-shadow: 0 0 15px 5px rgba(0, 123, 255, 0.6);
+  transform: scale(1.02);
+  transition: all 0.2s ease-in-out;
+  z-index: 0;
 }
 
 .book-card {

@@ -5,8 +5,42 @@
 <script>
 export default {
   name: "App",
+  mounted() {
+    window.addEventListener("keydown", this.handleKeydown);
+  },
+  beforeUnmount() {
+    window.removeEventListener("keydown", this.handleKeydown);
+  },
+  methods: {
+    handleKeydown(event) {
+      if (event.key === "Escape") {
+        this.$router.back();
+      }
+
+      if (event.altKey) {
+        switch (event.key.toLowerCase()) {
+          case "1":
+            this.$router.push("/");
+            break;
+          case "2":
+            this.$router.push("/catalog");
+            break;
+          case "3":
+            this.$router.push("/profile/books_shelf");
+            break;
+          case "a":
+            this.$router.push("/about");
+            break;
+          case "b":
+            this.$router.push("/rules");
+            break;
+        }
+      }
+    },
+  },
 };
 </script>
+
 <style>
 html,
 body {
@@ -57,6 +91,20 @@ body {
 
 .container {
   display: flex;
+}
+
+*:focus {
+  outline: 3px solid #ff7e5f !important;
+  outline-offset: 2px;
+  border-radius: 4px;
+  transition: outline 0.2s ease;
+  z-index: 1000;
+}
+
+.focus-visible {
+  outline: 3px solid #ff7e5f !important;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 @media (max-width: 1440px) {

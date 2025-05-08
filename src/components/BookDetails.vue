@@ -6,7 +6,7 @@
       <div class="book-header">
         <div class="book-photo-wrapper">
           <img
-            :src="`https://backend-library-0o7f.onrender.com/images/book_covers/${book.book_photo}`"
+            :src="`${book.book_photo}`"
             alt="Фото книги"
             v-if="book.book_photo"
             class="book-photo"
@@ -22,6 +22,11 @@
           <p><strong>Рік:</strong> {{ book.year }}</p>
           <p><strong>ISBN:</strong> {{ book.isbn }}</p>
           <p class="description">{{ book.book_description }}</p>
+          <div v-if="isAuthenticated" class="like-button">
+            <button @click="addLike">
+              <i class="fa fa-heart" aria-hidden="true"></i> Додати у вподобання
+            </button>
+          </div>
         </div>
       </div>
 
@@ -30,7 +35,7 @@
         <div class="author-content">
           <div class="author-photo-wrapper">
             <img
-              :src="`https://backend-library-0o7f.onrender.com/images/authors/${book.author_photo}`"
+              :src="`${book.author_photo}`"
               alt="Фото автора"
               v-if="book.author_photo"
               class="author-photo"
@@ -61,6 +66,8 @@
 
 <script>
 import api from "../api.js";
+import { mapState } from "vuex";
+import Swal from "sweetalert2";
 
 export default {
   name: "BookDetails",
@@ -82,6 +89,10 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState(["isAuthenticated"]),
+  },
+
   methods: {
     async fetchBook() {
       this.loading = true;
@@ -98,11 +109,63 @@ export default {
         this.loading = false;
       }
     },
+
+    async addLike() {
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await api.post(
+          "/likes",
+          { bookid: this.book.bookid },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Успіх!",
+          text: response.data.message,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Помилка",
+          text:
+            error.response?.data?.message || "Помилка при додаванні вподобання",
+        });
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+.like-button {
+  margin-top: 20px;
+}
+
+.like-button button {
+  background: #ff7e5f;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  margin: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.like-button button:hover {
+  background: #ff6844;
+}
+.like-button i {
+  margin-right: 5px;
+}
 .book-details {
   font-family: "Roboto", sans-serif;
   max-width: 1100px;

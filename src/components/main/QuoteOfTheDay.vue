@@ -26,20 +26,14 @@
               <div class="book-card">
                 <div class="book-front">
                   <img
-                    :src="
-                      'https://backend-library-0o7f.onrender.com/images/book_covers/' +
-                      book.book_photo
-                    "
+                    :src="book.book_photo"
                     alt="Фото книги"
                     v-if="book.book_photo"
                   />
                 </div>
                 <div class="book-back">
                   <img
-                    :src="
-                      'https://backend-library-0o7f.onrender.com/images/book_covers/' +
-                      book.book_photo
-                    "
+                    :src="book.book_photo"
                     alt="Фото книги"
                     v-if="book.book_photo"
                   />

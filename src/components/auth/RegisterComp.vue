@@ -3,27 +3,33 @@
     <div class="form-container">
       <h2>Register</h2>
       <form @submit.prevent="registerUser">
-        <label>Username:</label>
+        <label>Логін:</label>
         <input v-model="form.username" required />
 
-        <label>Password:</label>
+        <label>Пароль:</label>
         <input type="password" v-model="form.password" required />
 
-        <label>Email:</label>
+        <label>Пошти:</label>
         <input type="email" v-model="form.email" required />
 
-        <label>First Name:</label>
-        <input v-model="form.firstName" required />
+        <label>Ім'я:</label>
+        <input v-model="form.firstname" required />
 
-        <label>Last Name:</label>
-        <input v-model="form.lastName" required />
+        <label>Прізвище:</label>
+        <input v-model="form.lastname" required />
 
-        <label>Phone:</label>
+        <label>Номер телефону:</label>
         <input v-model="form.phone" required />
 
-        <button type="submit">Register</button>
+        <button type="submit">Зареєструватись</button>
       </form>
       <p>{{ message }}</p>
+
+      <button @click="goHome" class="back-home-btn">Назад на головну</button>
+
+      <p class="login-link">
+        Вже є профіль? <router-link to="/auth/login">Вхід</router-link>
+      </p>
     </div>
   </div>
 </template>
@@ -38,8 +44,8 @@ export default {
         username: "",
         password: "",
         email: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         phone: "",
       },
       message: "",
@@ -49,7 +55,7 @@ export default {
     async registerUser() {
       try {
         const response = await axios.post(
-          "https://backend-library-0o7f.onrender.com/register",
+          "https://backend-library-0o7f.onrender.com/api/auth/register",
           this.form
         );
         this.message = response.data.message;
@@ -57,6 +63,9 @@ export default {
         console.error("Error:", error);
         this.message = "Server error.";
       }
+    },
+    goHome() {
+      this.$router.push("/");
     },
   },
 };
@@ -121,5 +130,34 @@ button:hover {
 p {
   margin-top: 1rem;
   color: #333;
+}
+
+.back-home-btn {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.7rem;
+  background-color: #cccccc;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.back-home-btn:hover {
+  background-color: #b3b3b3;
+}
+
+.login-link {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.login-link a {
+  color: #ff7e5f;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
 }
 </style>

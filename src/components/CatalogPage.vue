@@ -9,7 +9,7 @@
         <div class="catalog-card">
           <h2 class="catalog-title">{{ catalog.catalog_name }}</h2>
           <p class="catalog-date">
-            Дата додавання: {{ catalog.catalog_entry_date }}
+            Дата додавання: {{ formatDate(catalog.catalog_entry_date) }}
           </p>
 
           <div class="books">
@@ -22,7 +22,7 @@
                 <div class="book-card">
                   <div class="book-front">
                     <img
-                      :src="`https://backend-library-0o7f.onrender.com/images/book_covers/${book.book_photo}`"
+                      :src="`${book.book_photo}`"
                       alt="Фото книги"
                       v-if="book.book_photo"
                     />
@@ -30,7 +30,7 @@
 
                   <div class="book-back">
                     <img
-                      :src="`https://backend-library-0o7f.onrender.com/images/book_covers/${book.book_photo}`"
+                      :src="`${book.book_photo}`"
                       alt="Фото книги"
                       v-if="book.book_photo"
                     />
@@ -75,6 +75,11 @@ export default {
         console.error("Помилка при отриманні каталогів:", err);
         this.catalogs = [];
       }
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return date.toLocaleDateString("uk-UA", options);
     },
   },
   mounted() {

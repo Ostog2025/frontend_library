@@ -3,14 +3,14 @@
     <SearchBooks />
     <div class="account">
       <template v-if="isAuthenticated">
-        <a href="/account">
-          <img class="avatar" src="@/assets/logo.png" alt="Avatar" />
-        </a>
+        <div class="auth-links">
+          <router-link to="/profile"> Профіль </router-link>
+        </div>
       </template>
       <template v-else>
         <div class="auth-links">
-          <a href="#/auth/login">Login</a>
-          <a href="#/auth/register">Register</a>
+          <router-link to="/auth/login">Login</router-link>
+          <router-link to="/auth/register">Register</router-link>
         </div>
       </template>
     </div>
@@ -19,16 +19,15 @@
 
 <script>
 import SearchBooks from "./SearchBooks.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "HeaderLibrary",
   components: {
     SearchBooks,
   },
-  data() {
-    return {
-      isAuthenticated: false,
-    };
+  computed: {
+    ...mapState(["isAuthenticated"]),
   },
 };
 </script>
@@ -64,7 +63,7 @@ export default {
 
 .auth-links a {
   text-decoration: none;
-  color: #007bff;
+  color: #003366;
   font-weight: bold;
   transition: color 0.3s;
 }

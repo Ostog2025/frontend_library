@@ -2,38 +2,51 @@
   <div :class="['gap', { collapsed }]">
     <div
       :class="['sidebar', { collapsed, mobileOpen: isMobile && !collapsed }]"
+      role="navigation"
+      aria-label="Бічне меню"
     >
-      <button class="toggle-button" @click="toggleSidebar">
+      <button
+        class="toggle-button"
+        @click="toggleSidebar"
+        aria-label="Перемкнути бічне меню"
+        @keydown.enter.prevent="toggleSidebar"
+      >
         <i :class="collapsed ? 'fas fa-arrow-right' : 'fas fa-arrow-left'"></i>
       </button>
+
       <h1 class="site-title" v-if="!collapsed">REREAD</h1>
+
       <nav class="main-links">
         <ul>
-          <li>
-            <a href="/">
-              <i class="fas fa-home"></i>
-              <span v-if="!collapsed">Головна</span>
-            </a>
-          </li>
-          <li>
-            <a href="#/catalog">
-              <i class="fas fa-book"></i>
-              <span v-if="!collapsed">Каталоги</span>
-            </a>
-          </li>
-          <li>
-            <a href="/shelf">
-              <i class="fas fa-layer-group"></i>
-              <span v-if="!collapsed">Моя полиця</span>
+          <li v-for="(item, index) in mainLinks" :key="index">
+            <a
+              href="#"
+              :aria-label="item.label"
+              role="link"
+              tabindex="0"
+              @click.prevent="navigateTo(item.route)"
+              @keydown.enter.prevent="navigateTo(item.route)"
+            >
+              <i :class="item.icon"></i>
+              <span v-if="!collapsed">{{ item.label }}</span>
             </a>
           </li>
         </ul>
       </nav>
+
       <nav class="footer-links" v-if="!collapsed">
         <ul>
-          <li><a href="/about">Про нас</a></li>
-          <li><a href="/help">Центр допомоги</a></li>
-          <li><a href="/rules">Правила</a></li>
+          <li v-for="(item, index) in footerLinks" :key="index">
+            <a
+              href="#"
+              :aria-label="item.label"
+              tabindex="0"
+              @click.prevent="navigateTo(item.route)"
+              @keydown.enter.prevent="navigateTo(item.route)"
+            >
+              {{ item.label }}
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -42,17 +55,36 @@
       v-if="isMobile && !collapsed"
       class="overlay"
       @click="toggleSidebar"
+      aria-hidden="true"
     ></div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "SidebarLibrary",
+  computed: {
+    ...mapState(["isAuthenticated"]),
+  },
   data() {
     return {
       collapsed: false,
       isMobile: false,
+      mainLinks: [
+        { label: "Головна", icon: "fas fa-home", route: "/" },
+        { label: "Каталоги", icon: "fas fa-book", route: "/catalog" },
+        {
+          label: "Моя полиця",
+          icon: "fas fa-layer-group",
+          route: "/profile/books_shelf",
+        },
+      ],
+      footerLinks: [
+        { label: "Про нас", route: "/about" },
+        { label: "Правила", route: "/rules" },
+      ],
     };
   },
   methods: {
@@ -63,13 +95,28 @@ export default {
       this.isMobile = window.innerWidth < 770;
       this.collapsed = this.isMobile;
     },
+    navigateTo(route) {
+      if (!this.isAuthenticated && route === "/profile/books_shelf") {
+        this.$router.push("/auth/login");
+      } else {
+        this.$router.push(route);
+      }
+    },
+    handleGlobalKeys(e) {
+      if (e.ctrlKey && e.key.toLowerCase() === "b") {
+        e.preventDefault();
+        this.toggleSidebar();
+      }
+    },
   },
   mounted() {
     this.handleResize();
     window.addEventListener("resize", this.handleResize);
+    window.addEventListener("keydown", this.handleGlobalKeys);
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("keydown", this.handleGlobalKeys);
   },
 };
 </script>
